@@ -41,11 +41,11 @@ jobs:
           at: /home/circleci/project
       - add_ssh_keys:
           fingerprints:
-            - "SHA256:VBkuFAQYoOSf8sM0dMoLUtXxaYZ5uyQ+Or0haE5R5uk" # <- sesuaikan
+            - "SHA256:VBkuFAQYoOSf8sM0dMoLUtXxaYZ5uyQ+Or0haE5R5uk"
       - run:
           name: Deploy to Server via SSH
           command: |
-            ssh -o StrictHostKeyChecking=no rzidinc@154.26.134.92 << 'EOF'
+            ssh -o StrictHostKeyChecking=no rzidinc@154.26.134.92 \<< 'EOF'
               set -e
               cd /home/rzidinc/Projects/sites/eka_patas
               git pull origin main
