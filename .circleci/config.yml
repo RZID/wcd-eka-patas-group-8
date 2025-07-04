@@ -1,27 +1,28 @@
 version: 2.1
 
 executors:
-  node-executor:
+  docker-executor:
     docker:
       - image: cimg/node:18.20.2
+    working_directory: ~/project
 
 jobs:
   build:
-    executor: node-executor
+    executor: docker-executor
     steps:
       - checkout
       - restore_cache:
           keys:
-            - v1-deps-{{ checksum "yarn.lock" }}
+            - v2-deps-{{ checksum "yarn.lock" }}
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
       - save_cache:
-          key: v1-deps-{{ checksum "yarn.lock" }}
+          key: v2-deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
       - run:
-          name: Build Next.js
+          name: Build Next.js app
           command: yarn build
       - persist_to_workspace:
           root: .
@@ -31,28 +32,34 @@ jobs:
             - node_modules
             - package.json
             - yarn.lock
-            - next.config.js
-            - tsconfig.json
+            - Dockerfile
+            - docker-compose.yml
 
   deploy:
-    executor: node-executor
+    executor: docker-executor
     steps:
       - attach_workspace:
-          at: /home/circleci/project
+          at: ~/project
       - add_ssh_keys:
           fingerprints:
             - "SHA256:VBkuFAQYoOSf8sM0dMoLUtXxaYZ5uyQ+Or0haE5R5uk"
       - run:
-          name: Deploy to Server via SSH
+          name: Deploy Docker Compose App
           command: |
-            ssh -o StrictHostKeyChecking=no rzidinc@154.26.134.92 \<< 'EOF'
-              set -e
-              cd /home/rzidinc/Projects/sites/eka_patas
-              git pull origin main
-              yarn install --frozen-lockfile
-              yarn build
-              pm2 describe eka-patas > /dev/null && pm2 restart eka-patas || pm2 start "yarn start" --name eka-patas
-            EOF
+            PROJECT_PATH=/home/rzidinc/Projects/sites/wcd_eka_patas_group_8
+
+            ssh -o StrictHostKeyChecking=no rzidinc@154.26.134.92 "
+              mkdir -p $PROJECT_PATH
+            "
+
+            scp -r .next public node_modules package.json yarn.lock Dockerfile docker-compose.yml rzidinc@154.26.134.92:$PROJECT_PATH/
+
+            ssh -o StrictHostKeyChecking=no rzidinc@154.26.134.92 "
+              cd $PROJECT_PATH &&
+              docker compose down || true &&
+              docker compose build &&
+              docker compose up -d
+            "
 
 workflows:
   build_and_deploy:
@@ -60,10 +67,10 @@ workflows:
       - build:
           filters:
             branches:
-              only: [main]
+              only: main
       - deploy:
           requires:
             - build
           filters:
             branches:
-              only: [main]
+              only: main

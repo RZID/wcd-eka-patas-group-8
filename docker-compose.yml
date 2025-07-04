@@ -1,0 +1,9 @@
+services:
+  nextjs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wcd_eka_patas_group_8
+    ports:
+      - "3300:3000"
+    restart: unless-stopped
