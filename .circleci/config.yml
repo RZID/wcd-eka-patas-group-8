@@ -33,15 +33,16 @@ jobs:
           name: Create Deployment Tarball
           command: |
             tar -czf app.tar.gz \
-              .next \
               src \
+              .next \
               public \
+              yarn.lock \
+              Dockerfile \
               node_modules \
               package.json \
-              yarn.lock \
               tsconfig.json \
-              Dockerfile \
               next.config.ts \
+              postcss.config.mjs\
               docker-compose.yml
 
       - persist_to_workspace:
