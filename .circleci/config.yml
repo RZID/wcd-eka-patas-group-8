@@ -11,51 +11,66 @@ jobs:
     executor: docker-executor
     steps:
       - checkout
+
       - restore_cache:
           keys:
             - v2-deps-{{ checksum "yarn.lock" }}
+
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
+
       - save_cache:
           key: v2-deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
+
       - run:
           name: Build Next.js app
           command: yarn build
+
+      - run:
+          name: Create Deployment Tarball
+          command: |
+            tar -czf app.tar.gz \
+              .next \
+              public \
+              node_modules \
+              package.json \
+              yarn.lock \
+              Dockerfile \
+              docker-compose.yml
+
       - persist_to_workspace:
           root: .
           paths:
-            - .next
-            - public
-            - node_modules
-            - package.json
-            - yarn.lock
-            - Dockerfile
-            - docker-compose.yml
+            - app.tar.gz
 
   deploy:
     executor: docker-executor
     steps:
       - attach_workspace:
           at: ~/project
+
       - add_ssh_keys:
           fingerprints:
             - "SHA256:VBkuFAQYoOSf8sM0dMoLUtXxaYZ5uyQ+Or0haE5R5uk"
+
       - run:
-          name: Deploy Docker Compose App
+          name: Deploy Tarball to Server and Run Docker Compose
           command: |
             PROJECT_PATH=/home/rzidinc/Projects/sites/wcd_eka_patas_group_8
 
-            ssh -o StrictHostKeyChecking=no rzidinc@154.26.134.92 "
-              mkdir -p $PROJECT_PATH
-            "
+            echo "📦 Creating target directory on server..."
+            ssh -o StrictHostKeyChecking=no rzidinc@154.26.134.92 "mkdir -p $PROJECT_PATH"
 
-            scp -r .next public node_modules package.json yarn.lock Dockerfile docker-compose.yml rzidinc@154.26.134.92:$PROJECT_PATH/
+            echo "🚚 Transferring tarball to server..."
+            scp app.tar.gz rzidinc@154.26.134.92:$PROJECT_PATH/
 
-            ssh -o StrictHostKeyChecking=no rzidinc@154.26.134.92 "
+            echo "📂 Extracting & Running Docker Compose..."
+            ssh -t -o StrictHostKeyChecking=no rzidinc@154.26.134.92 "
               cd $PROJECT_PATH &&
+              tar -xzf app.tar.gz &&
               docker compose down || true &&
               docker compose build &&
               docker compose up -d
