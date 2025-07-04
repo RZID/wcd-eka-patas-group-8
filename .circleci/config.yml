@@ -54,7 +54,7 @@ jobs:
 
       - add_ssh_keys:
           fingerprints:
-            - "SHA256:VBkuFAQYoOSf8sM0dMoLUtXxaYZ5uyQ+Or0haE5R5uk"
+            - "SHA256:n+VPAk6fqfev3EcqlhCl0iToOae0jloWcPUYungwVic"
 
       - run:
           name: Deploy Tarball to Server and Run Docker Compose
