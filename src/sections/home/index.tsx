@@ -10,9 +10,6 @@ import { PiGpsFix } from "react-icons/pi";
 import { GrLocation } from "react-icons/gr";
 import { easeOut, motion } from "framer-motion";
 
-// Assets
-import backgroundImage from "@/assets/images/hero-background.png";
-
 // Components
 import Card from "@/components/card";
 import Input from "@/components/input";
@@ -37,7 +34,7 @@ const Home = () => {
       id="home"
       className={classNames("h-screen", "bg-cover", "bg-center")}
       style={{
-        backgroundImage: `url(${backgroundImage.src})`,
+        backgroundImage: `url('/images/hero-background.png')`,
       }}
     >
       <div className={classNames("pb-20", "bg-black/40", "h-full")}>
