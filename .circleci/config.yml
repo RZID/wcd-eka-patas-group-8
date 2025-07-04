@@ -1,0 +1,69 @@
+version: 2.1
+
+executors:
+  node-executor:
+    docker:
+      - image: cimg/node:18.20.2
+
+jobs:
+  build:
+    executor: node-executor
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install dependencies
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          key: v1-deps-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+      - run:
+          name: Build Next.js
+          command: yarn build
+      - persist_to_workspace:
+          root: .
+          paths:
+            - .next
+            - public
+            - node_modules
+            - package.json
+            - yarn.lock
+            - next.config.js
+            - tsconfig.json
+
+  deploy:
+    executor: node-executor
+    steps:
+      - attach_workspace:
+          at: /home/circleci/project
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:VBkuFAQYoOSf8sM0dMoLUtXxaYZ5uyQ+Or0haE5R5uk" # <- sesuaikan
+      - run:
+          name: Deploy to Server via SSH
+          command: |
+            ssh -o StrictHostKeyChecking=no rzidinc@154.26.134.92 << 'EOF'
+              set -e
+              cd /home/rzidinc/Projects/sites/eka_patas
+              git pull origin main
+              yarn install --frozen-lockfile
+              yarn build
+              pm2 describe eka-patas > /dev/null && pm2 restart eka-patas || pm2 start "yarn start" --name eka-patas
+            EOF
+
+workflows:
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: [main]
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: [main]
