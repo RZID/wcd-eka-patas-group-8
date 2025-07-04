@@ -34,6 +34,7 @@ jobs:
           command: |
             tar -czf app.tar.gz \
               .next \
+              src \
               public \
               node_modules \
               package.json \
@@ -73,7 +74,8 @@ jobs:
               tar -xzf app.tar.gz &&
               docker compose down || true &&
               docker compose build &&
-              docker compose up -d
+              docker compose up --wait &&
+              rm -f app.tar.gz
             "
 
 workflows:
