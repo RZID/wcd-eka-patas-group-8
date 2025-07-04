@@ -7,3 +7,5 @@ services:
     ports:
       - "3300:3000"
     restart: unless-stopped
+    environment:
+      - NODE_ENV=production

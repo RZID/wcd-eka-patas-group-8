@@ -1,7 +1,10 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
 
-const nextConfig: NextConfig = {
-  /* config options here */
+const isProd = process.env.NODE_ENV === "production";
+
+const nextConfig = {
+  basePath: isProd ? "/wcd/eka-patas" : "",
+  trailingSlash: true,
 };
 
-export default nextConfig;
+module.exports = nextConfig;
