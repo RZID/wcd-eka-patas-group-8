@@ -4,11 +4,6 @@
 import { useState } from "react";
 import classNames from "classnames";
 
-// Assets
-import TimelineImage1 from "@/assets/images/timeline-1.png";
-import TimelineImage2 from "@/assets/images/timeline-2.png";
-import TimelineImage3 from "@/assets/images/timeline-3.png";
-
 // Types
 import { TimelineType } from "./types";
 
@@ -21,13 +16,13 @@ const Timeline = () => {
       type: "start",
       title: "Surabaya",
       desc: "Titik keberangkatan bisa dari garasi kami atau terminal Bungurasih",
-      image: TimelineImage1,
+      image: "/images/timeline-1.png",
     },
     {
       type: "rest",
       title: "Rest Area KM 575",
       desc: "Titik keberangkatan bisa dari garasi kami atau terminal Bungurasih",
-      image: TimelineImage2,
+      image: "/images/timeline-2.png",
     },
     {
       type: "end",
@@ -36,7 +31,7 @@ const Timeline = () => {
         "Untuk penumpang tujuan solo titik pemberhentian ada di terminal Tirtonadi.",
         "Untuk penumpang tujuan Kota Yogya & Magelang, bisa melanjutkan perjalanan.",
       ],
-      image: TimelineImage3,
+      image: "/images/timeline-3.png",
     },
   ]);
 

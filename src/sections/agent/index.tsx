@@ -10,9 +10,6 @@ import { useRef, useEffect } from "react";
 // Components
 import Search from "@/components/search";
 
-// Assets
-import Silhouette from "@/assets/images/silhouette.png";
-
 const fadeInUp: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
@@ -110,7 +107,7 @@ const Agent = () => {
           className={classNames("flex", "flex-row", "justify-center")}
         >
           <Image
-            src={Silhouette}
+            src="/images/silhouette.png"
             alt="Silhouette"
             className={classNames("w-3/12", "aspect-square", "object-contain")}
           />

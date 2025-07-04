@@ -9,9 +9,6 @@ import { FiFacebook, FiInstagram, FiYoutube } from "react-icons/fi";
 // Components
 import Wave from "@/components/wave";
 
-// Assets
-import Logo from "@/assets/images/logo.png";
-
 const Footer = () => {
   const footerLinks = [
     "Support",
@@ -62,7 +59,7 @@ const Footer = () => {
           >
             <div className={classNames("w-1/2", "relative")}>
               <Image
-                src={Logo}
+                src="/images/logo.png"
                 alt="Logo"
                 className={classNames("w-full", "h-auto", "object-contain")}
               />

@@ -10,9 +10,6 @@ import { easeOut, useInView, motion, useAnimation } from "framer-motion";
 // Components
 import Card from "@/components/card";
 
-// Assets
-import Bus from "@/assets/images/bus-transparent.png";
-
 const About = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
@@ -120,7 +117,7 @@ const About = () => {
           </Card>
 
           <Image
-            src={Bus}
+            src="/images/bus-transparent.png"
             alt="Bus Transparent"
             className={classNames(
               "z-10",

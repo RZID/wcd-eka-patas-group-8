@@ -7,8 +7,7 @@ import classNames from "classnames";
 import { FiMenu, FiX } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 
-// Assets
-import Logo from "@/assets/images/logo.png";
+// Components
 import Button from "../button";
 
 const Navbar = () => {
@@ -50,7 +49,7 @@ const Navbar = () => {
           )}
         >
           <Image
-            src={Logo}
+            src="/images/logo.png"
             alt="Logo Eka Patas"
             className={classNames("h-16", "w-auto", "object-contain")}
           />
