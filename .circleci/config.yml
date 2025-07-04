@@ -32,7 +32,17 @@ jobs:
       - run:
           name: Create Deployment Tarball
           command: |
-            tar --exclude='.git' -czf app.tar.gz .
+            tar -czf app.tar.gz \
+              .next \
+              src \
+              public \
+              node_modules \
+              package.json \
+              yarn.lock \
+              tsconfig.json \
+              Dockerfile \
+              next.config.ts \
+              docker-compose.yml
 
       - persist_to_workspace:
           root: .
@@ -61,12 +71,12 @@ jobs:
             scp app.tar.gz rzidinc@154.26.134.92:$PROJECT_PATH/
 
             echo "📂 Extracting & Running Docker Compose..."
-            ssh -o StrictHostKeyChecking=no rzidinc@154.26.134.92 "
+            ssh -t -o StrictHostKeyChecking=no rzidinc@154.26.134.92 "
               cd $PROJECT_PATH &&
               tar -xzf app.tar.gz &&
               docker compose down || true &&
               docker compose build &&
-              docker compose up -d --wait &&
+              docker compose up --wait &&
               rm -f app.tar.gz
             "
 
