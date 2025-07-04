@@ -3,7 +3,7 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: cimg/node:22.14.0
+      - image: cimg/node:18.20.2
 
 jobs:
   build:
@@ -12,21 +12,27 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package-lock.json" }}
+            - v1-deps-{{ checksum "yarn.lock" }}
       - run:
           name: Install dependencies
-          command: yarn install
+          command: yarn install --frozen-lockfile
       - save_cache:
-          key: v1-dependencies-{{ checksum "package-lock.json" }}
+          key: v1-deps-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
       - run:
-          name: Build Project
+          name: Build Next.js
           command: yarn build
       - persist_to_workspace:
           root: .
           paths:
-            - dist
+            - .next
+            - public
+            - node_modules
+            - package.json
+            - yarn.lock
+            - next.config.js
+            - tsconfig.json
 
   deploy:
     executor: node-executor
@@ -35,15 +41,18 @@ jobs:
           at: /home/circleci/project
       - add_ssh_keys:
           fingerprints:
-            - "SHA256:VBkuFAQYoOSf8sM0dMoLUtXxaYZ5uyQ+Or0haE5R5uk" # Replace with actual fingerprint
+            - "SHA256:VBkuFAQYoOSf8sM0dMoLUtXxaYZ5uyQ+Or0haE5R5uk" # <- sesuaikan
       - run:
-          name: Deploy to Server
+          name: Deploy to Server via SSH
           command: |
-            ssh -o StrictHostKeyChecking=no rzidinc@154.26.134.92 "
-              cd /home/rzidinc/Projects/sites/wcd_cakrawala_6 &&
-              rm -rf dist &&
-              mkdir dist"
-            scp -r dist/* rzidinc@154.26.134.92:/home/rzidinc/Projects/sites/wcd_cakrawala_6/dist
+            ssh -o StrictHostKeyChecking=no rzidinc@154.26.134.92 << 'EOF'
+              set -e
+              cd /home/rzidinc/Projects/sites/eka_patas
+              git pull origin main
+              yarn install --frozen-lockfile
+              yarn build
+              pm2 describe eka-patas > /dev/null && pm2 restart eka-patas || pm2 start "yarn start" --name eka-patas
+            EOF
 
 workflows:
   build_and_deploy:
@@ -51,11 +60,10 @@ workflows:
       - build:
           filters:
             branches:
-              only:
-                - main
+              only: [main]
       - deploy:
           requires:
             - build
           filters:
             branches:
-              only: main # Deploy only if merged to `main`
+              only: [main]
