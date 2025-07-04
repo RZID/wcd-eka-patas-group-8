@@ -49,8 +49,10 @@ const Navbar = () => {
           )}
         >
           <Image
-            src="/images/logo.png"
+            width={3840}
+            height={3840}
             alt="Logo Eka Patas"
+            src="/images/logo.png"
             className={classNames("h-16", "w-auto", "object-contain")}
           />
 

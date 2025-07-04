@@ -107,8 +107,10 @@ const Agent = () => {
           className={classNames("flex", "flex-row", "justify-center")}
         >
           <Image
-            src="/images/silhouette.png"
+            width={3840}
+            height={3840}
             alt="Silhouette"
+            src="/images/silhouette.png"
             className={classNames("w-3/12", "aspect-square", "object-contain")}
           />
         </motion.div>

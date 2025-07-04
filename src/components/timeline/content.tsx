@@ -57,6 +57,8 @@ const TimelineContent = ({
         </div>
 
         <Image
+          width={3840}
+          height={3840}
           src={timeline.image}
           alt="Timeline image"
           className={classNames("h-64", "object-cover", "w-full")}

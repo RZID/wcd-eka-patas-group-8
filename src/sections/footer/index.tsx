@@ -59,8 +59,10 @@ const Footer = () => {
           >
             <div className={classNames("w-1/2", "relative")}>
               <Image
-                src="/images/logo.png"
                 alt="Logo"
+                width={3840}
+                height={3840}
+                src="/images/logo.png"
                 className={classNames("w-full", "h-auto", "object-contain")}
               />
             </div>

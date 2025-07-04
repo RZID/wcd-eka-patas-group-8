@@ -5,6 +5,7 @@ import {
   MdOutlineCalendarToday,
   MdOutlineConfirmationNumber,
 } from "react-icons/md";
+import Image from "next/image";
 import classNames from "classnames";
 import { PiGpsFix } from "react-icons/pi";
 import { GrLocation } from "react-icons/gr";
@@ -32,12 +33,27 @@ const Home = () => {
   return (
     <div
       id="home"
-      className={classNames("h-screen", "bg-cover", "bg-center")}
-      style={{
-        backgroundImage: `url('/images/hero-background.png')`,
-      }}
+      className={classNames("h-screen", "relative", "overflow-hidden")}
     >
-      <div className={classNames("pb-20", "bg-black/40", "h-full")}>
+      {/* Background Image */}
+      <div className={classNames("absolute", "inset-0", "z-0")}>
+        <Image
+          src="/images/hero-background.png"
+          alt="Hero Background"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
+      </div>
+
+      {/* Overlay */}
+      <div
+        className={classNames("absolute", "inset-0", "bg-black/40", "z-10")}
+      />
+
+      {/* Content */}
+      <div className={classNames("relative", "z-20", "pb-20", "h-full")}>
         <div
           className={classNames(
             "mx-5",

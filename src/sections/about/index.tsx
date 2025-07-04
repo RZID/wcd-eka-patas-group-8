@@ -117,8 +117,10 @@ const About = () => {
           </Card>
 
           <Image
-            src="/images/bus-transparent.png"
+            width={3840}
+            height={3840}
             alt="Bus Transparent"
+            src="/images/bus-transparent.png"
             className={classNames(
               "z-10",
               "w-1/5",
