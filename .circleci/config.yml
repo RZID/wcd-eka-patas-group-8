@@ -39,6 +39,7 @@ jobs:
               node_modules \
               package.json \
               yarn.lock \
+              tsconfig.json \
               Dockerfile \
               docker-compose.yml
 
