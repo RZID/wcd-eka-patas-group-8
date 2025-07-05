@@ -26,7 +26,8 @@ const Search = (props: SearchType) => {
         "rounded-full",
         "items-center",
         "text-orange-600",
-        "border-orange-600"
+        "border-orange-600",
+        "w-full"
       )}
       onClick={(e) => {
         if ((e.target as HTMLElement).closest("button")) return;
@@ -41,6 +42,7 @@ const Search = (props: SearchType) => {
         placeholder={props.placeholder}
         className={classNames(
           "flex-1",
+          "min-w-0",
           "focus:ring-0",
           "text-stone-900",
           "focus:border-none",
@@ -48,8 +50,10 @@ const Search = (props: SearchType) => {
           "placeholder:text-neutral-600"
         )}
       />
-      <div>
-        <Button variant="primary">Cari</Button>
+      <div className={classNames("flex", "flex-row")}>
+        <Button noFullWidth variant="primary">
+          Cari
+        </Button>
       </div>
     </div>
   );

@@ -71,9 +71,9 @@ const Agent = () => {
 
         {/* Subtitle */}
         <motion.h3
+          custom={1}
           initial="hidden"
           animate={controls}
-          custom={1}
           variants={fadeInUp}
           className={classNames(
             "text-2xl",
@@ -87,13 +87,13 @@ const Agent = () => {
 
         {/* Search */}
         <motion.div
+          custom={2}
           initial="hidden"
           animate={controls}
-          custom={2}
           variants={fadeInUp}
           className={classNames("flex", "flex-row", "justify-center")}
         >
-          <div className={classNames("lg:w-2/3", "w-full")}>
+          <div className={classNames("lg:w-2/3", "w-full", "relative")}>
             <Search placeholder="Masukkan nama kotamu" />
           </div>
         </motion.div>
